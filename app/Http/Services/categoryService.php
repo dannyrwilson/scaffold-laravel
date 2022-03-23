@@ -25,7 +25,7 @@ class CategoryService
    */
 	public function store($request) {
     $this->category->fill($request->all());
-		return $category->save();
+		return $this->category->save();
 	}
 
 	/**
@@ -42,17 +42,17 @@ class CategoryService
 	/**
    * Get the selected categories
    *
-   * @param  Category ID $category_id
+   * @param  Category Parent ID $parent_id
    * @return Array
    */
-	public function getAllCategories( $category_id ) {
+	public function getAllCategories( $parent_id ) {
 
 		$categories = $this->category->with(['childrenCategories', 'products']);
 
 
 		// Category ID Filter
-		if( isset( $category_id ) && !is_null( $category_id ) ) {
-			$categories = $categories->where('id', $category_id);
+		if( isset( $parent_id ) && !is_null( $parent_id ) ) {
+			$categories = $categories->where('parent_id', $parent_id);
 		} else {
 			$categories = $categories->whereNull('parent_id');
 		}

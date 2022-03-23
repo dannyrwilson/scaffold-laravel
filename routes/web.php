@@ -21,6 +21,7 @@ Route::resources([
     'categories' => 'CategoryController',
     'products' => 'ProductController'
 ]);
+Route::put('/categories/{id}', [CategoryController::class, 'update']);
 
 
 Route::get('/home', 'HomeController@index')->name('home');

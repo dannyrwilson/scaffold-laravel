@@ -4,17 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Services\ProductService;
 
 class ProductController extends Controller
 {
+
+    public function __construct() {
+        $this->productService = new ProductService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filters = [];
+        if(isset($request->categoryId)
+            && !empty($request->categoryId)){
+            $filters['category_id'] = $request->categoryId;
+        }
+
+        return view('products.products_list', [
+            'products' => $this->productService->getAllProducts($filters)
+        ]);
     }
 
     /**
@@ -38,16 +52,6 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

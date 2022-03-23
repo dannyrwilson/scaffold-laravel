@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Services\CategoryService;
@@ -31,9 +30,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return view('categories.category_edit', [
+            'categoryId' => $request->get('categoryId') ? $request->get('categoryId') : ''
+        ]);
     }
 
     /**
@@ -44,7 +45,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->categoryService->store($request);
+        $appendParent = ( !is_null($request->parent_id) ) ? '/'.$request->parent_id : $appendParent = '';
+        return redirect(route('categories.index').$appendParent);
     }
 
     /**
@@ -55,7 +58,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('categories.categories_list', [
+            'category' => $category,
+            'categories' => $this->categoryService->getAllCategories($category->id)
+        ]);
     }
 
     /**
@@ -66,7 +72,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.category_edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -78,7 +86,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $this->categoryService->update($request, $category);
+        $appendParent = ( !is_null($category->parent_id) ) ? '/'.$category->parent_id : $appendParent = '';
+        return redirect(route('categories.index').$appendParent);
     }
 
     /**

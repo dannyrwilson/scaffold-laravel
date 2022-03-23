@@ -13,8 +13,8 @@ class ProductService
 	/**
 	 * Inject the Product Model via __construct
 	 */
-	public function __construct(Product $product) {
-		$this->product = $product;
+	public function __construct() {
+		$this->product = new \App\Product;
 	}
 
 	/**
@@ -51,13 +51,11 @@ class ProductService
 
 	public function getAllProducts( $filters ) {
 
-		$products = $this->product
-			->where('store_id', $storeId)
-			->with(['category', 'images']);
+		$products = $this->product;
 
 		// Category ID Filter
 		if( isset($filters['category_id']) ) {
-			$categories = $categories->where('category_id', $filters['category_id']);
+			$products = $products->where('category_id', $filters['category_id']);
 		}
 
 		// Sorting Filter
