@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resources([
-    'categories' => 'CaregoryController',
+    'categories' => 'CategoryController',
     'products' => 'ProductController'
 ]);
 

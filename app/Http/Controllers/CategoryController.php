@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+
+    public function __construct(
+        //CategoryService $categoryService
+    ) {
+        $this->categoryService = new CategoryService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('categories.categories_list', [
+            'categories' => $this->categoryService->getAllCategories(null)
+        ]);
     }
 
     /**

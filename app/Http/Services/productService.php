@@ -23,7 +23,7 @@ class ProductService
    * @param  Request $request
    * @return Booleen
    */
-	public function store($request, $storeId) {
+	public function store($request) {
     $this->product->fill($request->all());
 		return $this->product->save();
 	}

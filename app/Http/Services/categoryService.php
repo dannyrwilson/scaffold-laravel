@@ -2,7 +2,7 @@
 namespace App\Http\Services;
 
 /**
- * categoryService.php
+ * CategoryService.php
  * Handle business logic between controller & view.
  */
 
@@ -13,8 +13,8 @@ class CategoryService
 	/**
 	 * Inject the Category Model via __construct
 	 */
-	public function __construct(Category $category) {
-		$this->category = $category;
+	public function __construct() {
+		$this->category = new \App\Category;
 	}
 
 	/**
@@ -47,19 +47,16 @@ class CategoryService
    */
 	public function getAllCategories( $category_id ) {
 
-		$categories = $this->category
-			->with(['category']);
+		$categories = $this->category->with(['childrenCategories', 'products']);
 
-		if( isset($filters)
-				&& is_array($filters)
-				&& count($filters) > 0) {
 
-			// Category ID Filter
-			if( isset( $category_id ) {
-				$categories = $categories->where('category_id', $category_id);
-			}
-
+		// Category ID Filter
+		if( isset( $category_id ) && !is_null( $category_id ) ) {
+			$categories = $categories->where('id', $category_id);
+		} else {
+			$categories = $categories->whereNull('parent_id');
 		}
+		
 
 		$categories = $categories->get();
 
