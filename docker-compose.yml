@@ -1,0 +1,52 @@
+version: '2'
+
+services:
+  base:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    command: /bin/true
+    image: scaffold_laravel_base:latest
+
+  database:
+    container_name: scaffold_laravel_database
+    image: mysql:5.7.11
+    ports:
+      - "3306:3306"
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: "$DB_PASSWORD"
+      MYSQL_DATABASE: "$DB_DATABASE"
+      MYSQL_USER: "$DB_USERNAME"
+      MYSQL_PASSWORD: "$DB_PASSWORD"
+    depends_on:
+      - base
+    networks:
+      - scaffold_laravel
+
+  selenium:
+    container_name: scaffold_laravel_selenium
+    image: selenium/standalone-chrome:latest
+    networks:
+      - scaffold_laravel
+
+  web:
+    container_name: scaffold_laravel_web
+    build:
+      context: ./
+      dockerfile: ./docker/common/web/Dockerfile
+    image: scaffold_laravel_web_base
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+    depends_on:
+      - database
+    links:
+      - database:database
+    networks:
+      - scaffold_laravel
+
+networks:
+  scaffold_laravel:
+    driver: bridge

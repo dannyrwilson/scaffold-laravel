@@ -1,0 +1,114 @@
+{
+    "categories": [{
+        "name": "Phones",
+        "categories": [{
+            "name": "Apple",
+            "products": [{
+                "name": "iPhone 7",
+                "price": 449
+            }, {
+                "name": "iPhone 7 Plus",
+                "price": 569
+            }, {
+                "name": "iPhone 8",
+                "price": 599
+            }, {
+                "name": "iPhone 8 Plus",
+                "price": 699
+            }, {
+                "name": "iPhone XS",
+                "price": 999
+            }, {
+                "name": "iPhone XS Max",
+                "price": 1099
+            }, {
+                "name": "iPhone XR",
+                "price": 749
+            }]
+        }, {
+            "name": "Huawei",
+            "products": [{
+                "name": "HUAWEI P20 Lite",
+                "price": 229
+            }, {
+                "name": "HUAWEI P20",
+                "price": 399
+            }, {
+                "name": "HUAWEI P Smart",
+                "price": 149
+            }, {
+                "name": "HUAWEI P20 Pro",
+                "price": 629
+            }, {
+                "name": "HUAWEI Mate 20 Lite",
+                "price": 379
+            }, {
+                "name": "HUAWEI Y7 2018",
+                "price": 149
+            }]
+        }, {
+            "name": "Samsung",
+            "products": [{
+                "name": "SAMSUNG Galaxy A7 (2018)",
+                "price": 309
+            }, {
+                "name": "SAMSUNG Galaxy J6",
+                "price": 179
+            }, {
+                "name": "SAMSUNG Galaxy Note 9",
+                "price": 849
+            }, {
+                "name": "SAMSUNG Galaxy S9",
+                "price": 739
+            }, {
+                "name": "SAMSUNG Galaxy S8",
+                "price": 599
+            }, {
+                "name": "SAMSUNG Galaxy J5",
+                "price": 199.99
+            }, {
+                "name": "SAMSUNG Galaxy S9+",
+                "price": 869
+            }]
+        }]
+    }, {
+        "name": "Tablets",
+        "categories": [{
+            "name": "Apple",
+            "products": [{
+                "name": "iPad mini 4",
+                "price": 399
+            }, {
+                "name": "iPad",
+                "price": 319
+            }, {
+                "name": "iPad Pro 10.5\"",
+                "price": 619
+            }, {
+                "name": "new iPad Pro 11\"",
+                "price": 769
+            }, {
+                "name": "new iPad Pro 12.9\"",
+                "price": 969
+            }]
+        }, {
+            "name": "Android",
+            "products": [{
+                "name": "HUAWEI MediaPad T3 10 9.6\"",
+                "price": 129.99
+            }, {
+                "name": "SAMSUNG Galaxy Tab A 10.1\"",
+                "price": 199.99
+            }, {
+                "name": "LENOVO Tab E10 Tablet",
+                "price": 129.99
+            }, {
+                "name": "SAMSUNG Galaxy Tab S4 10.5\"",
+                "price": 599.99
+            }, {
+                "name": "SAMSUNG Galaxy Tab S2 8\"",
+                "price": 299.99
+            }]
+        }]
+    }]
+}
