@@ -39,6 +39,10 @@ class CategoryService
 		return $category->save();
 	}
 
+	public function getCategory($categoryId) {
+		return $this->category->find($categoryId);
+	}
+
 	/**
    * Get the selected categories
    *

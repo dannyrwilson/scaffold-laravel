@@ -56,6 +56,11 @@ class ProductService
 		// Category ID Filter
 		if( isset($filters['category_id']) ) {
 			$products = $products->where('category_id', $filters['category_id']);
+
+		}
+
+		if( isset($filters['category_id_children']) ) {
+			$products = $products->orWhereIn('category_id', $filters['category_id_children']);
 		}
 
 		// Sorting Filter

@@ -7,7 +7,7 @@
 			@if(!isset($category))
 				<h1>Add Category</h1>
 			@else
-				<h1>Edit {{ $category->name }}</h1>
+				<h1>Edit Category "{{ $category->name }}"</h1>
 			@endif
 			<hr>
 		</div>

@@ -7,7 +7,7 @@
 			@if( !isset($category) )
 				<div class="row">
 					<div class="col-sm-8">
-						<h1>All Categories</h1>
+						<h1>All Top Level Categories</h1>
 					</div>
 					<div class="col-sm-4 text-right">
 						<a href="{{ route('categories.create') }}" class="btn btn-success">New Category</a>
