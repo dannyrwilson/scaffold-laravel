@@ -8,7 +8,7 @@
 * Column sorting by table headers
 * Laravel pagination for server side pagination
 * Laravel validation for server side validation
-
+* Free text search on products
 
 <p align="center" style="background-color: #FFF; padding: 20px;"><img src="https://scaffold.digital/wp-content/themes/scaffold/assets/img/samples/logo.svg" alt="Scaffold"></p>
 
