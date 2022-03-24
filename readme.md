@@ -1,3 +1,14 @@
+## Additional bits...
+* Ability to delete categories
+* Ability to delete products
+* Ability to edit categories
+* Ability to edit products
+* Use of laravel session to display messages on edit/add resources
+* Use of carbon to parse the date into UK format for created_at making use of the eloquent mutators.
+* Column sorting by table headers
+* Laravel pagination
+
+
 <p align="center" style="background-color: #FFF; padding: 20px;"><img src="https://scaffold.digital/wp-content/themes/scaffold/assets/img/samples/logo.svg" alt="Scaffold"></p>
 
 ## The Challenge

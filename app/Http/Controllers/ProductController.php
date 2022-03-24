@@ -4,15 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Repository\ProductRepository;
+use App\Http\Repository\CategoryRepository;
 use App\Http\Services\ProductService;
-use App\Http\Services\CategoryService;
 
 class ProductController extends Controller
 {
+    /**
+     * The product repository implementation.
+     *
+     * @var ProductRepository
+     */
+    protected $product;
 
-    public function __construct() {
-        $this->productService  = new ProductService;
-        $this->categoryService = new CategoryService;
+    /**
+     * The category repository implementation.
+     *
+     * @var CategoryRepository
+     */
+    protected $category;
+
+    /**
+     * The product service implementation.
+     *
+     * @var ProductService
+     */
+    protected $productService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  ProductRepository  $product
+     * @param  ProductService $productService
+     * @param  CategoryRepository  $category
+     * @return void
+     */
+    public function __construct(
+        ProductRepository $product, 
+        ProductService $productService, 
+        CategoryRepository $category) {
+
+        $this->productRepository  = $product;
+        $this->categoryRepository = $category;
+        $this->productService     = $productService;
+
     }
 
     /**
@@ -22,23 +57,18 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = [];
+        if( is_null($request->categoryId) ) abort(404);
+    
+        // find selected category
+        $category = $this->categoryRepository->getCategory($request->categoryId);
 
-        if(isset($request->categoryId)
-            && !empty($request->categoryId)){
-            $filters['category_id'][] = $request->categoryId;
-        }
-
-        $category = $this->categoryService->getCategory($request->categoryId);
-        
-        // top level category, pass other children IDs
-        if( is_null($category->parent_id) ) {
-            $filters['category_id_children'] = $category->childrenCategories->pluck('id')->toArray();
-        }
+        // default filters
+        $filters = $this->productService->getFilters($request, $category);
 
         return view('products.products_list', [
-            'products' => $this->productService->getAllProducts($filters),
-            'category' => $category
+            'products' => $this->productRepository->getAllProducts($filters),
+            'category' => $category,
+            'filters' => $filters
         ]);
     }
 
@@ -55,6 +85,18 @@ class ProductController extends Controller
     }
 
     /**
+     * Show the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Product $product)
+    {
+        return view('products.product_view', [
+            'product' => $product
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -62,9 +104,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $this->productService->store($request);
-        $append = '/?categoryId='.$request->category_id;
-        return redirect(route('products.index').$append);
+
+        // handle validation, more complex validation can be moved to it's own Form Request.
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required'
+        ]);
+
+        if($request->validated() && $this->productRepository->store($request)){
+            session()->flash('message', 'Product successfully created.');   
+        }else{
+            session()->flash('message', 'Product failed to create.');
+        }
+        return redirect('products?categoryId='.$request->category_id);
     }
 
 
@@ -76,7 +129,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('products.product_edit', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -88,7 +143,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        if($this->productRepository->update($request, $product)){
+            session()->flash('message', 'Product successfully updated.');   
+        }else{
+            session()->flash('message', 'Product failed to update.');
+        }
+        return redirect('/products?categoryId='.$product->category_id);
     }
 
     /**
@@ -99,6 +159,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if($this->productRepository->delete($product)){
+            session()->flash('message', 'Product successfully deleted.');
+        }else{
+            session()->flash('message', 'Product failed to delete.');
+        }
+        return redirect()->back();
     }
 }

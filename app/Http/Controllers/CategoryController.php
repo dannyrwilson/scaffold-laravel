@@ -3,16 +3,28 @@
 namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
-use App\Http\Services\CategoryService;
+use App\Http\Repository\CategoryRepository;
 
 class CategoryController extends Controller
 {
 
-    public function __construct(
-        //CategoryService $categoryService
-    ) {
-        $this->categoryService = new CategoryService;
+    /**
+     * The category repository implementation.
+     *
+     * @var CategoryRepository
+     */
+    protected $category;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  CategoryRepository  $category
+     * @return void
+     */
+    public function __construct(CategoryRepository $category) {
+        $this->categoryRepository = $category;
     }
+    
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +33,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('categories.categories_list', [
-            'categories' => $this->categoryService->getAllCategories(null)
+            'categories' => $this->categoryRepository->getAllCategories(null)
         ]);
     }
 
@@ -38,19 +50,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->categoryService->store($request);
-        $appendParent = ( !is_null($request->parent_id) ) ? '/'.$request->parent_id : $appendParent = '';
-        return redirect(route('categories.index').$appendParent);
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Category  $category
@@ -60,7 +59,7 @@ class CategoryController extends Controller
     {
         return view('categories.categories_list', [
             'category' => $category,
-            'categories' => $this->categoryService->getAllCategories($category->id)
+            'categories' => $this->categoryRepository->getAllCategories($category->id)
         ]);
     }
 
@@ -78,6 +77,29 @@ class CategoryController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+        // handle validation, more complex validation can be moved to it's own Form Request.
+        $request->validate([
+            'name' => 'required|unique:categories'
+        ]);
+
+        $appendParent = ( !is_null($request->parent_id) ) ? '/'.$request->parent_id : $appendParent = '';
+        if($this->categoryRepository->store($request)){
+            session()->flash('message', 'Category successfully added.');
+        }else{
+            session()->flash('message', 'Category failed to add.');
+        }
+        return redirect(route('categories.index').$appendParent);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,8 +108,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $this->categoryService->update($request, $category);
+
+        $request->validate([
+            'name' => 'required'
+        ]);
+
         $appendParent = ( !is_null($category->parent_id) ) ? '/'.$category->parent_id : $appendParent = '';
+        if($this->categoryRepository->update($request, $category)){
+            session()->flash('message', 'Category successfully updated.');
+        }else{
+            session()->flash('message', 'Category failed to update.');
+        }
         return redirect(route('categories.index').$appendParent);
     }
 
@@ -99,6 +130,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        if($this->categoryRepository->delete($category)){
+            session()->flash('message', 'Category successfully deleted.');
+        }else{
+            session()->flash('message', 'Category failed to delete.');
+        }
+        return redirect()->back();
     }
 }

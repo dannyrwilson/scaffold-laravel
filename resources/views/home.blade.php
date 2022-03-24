@@ -16,6 +16,9 @@
 
                     You are logged in!
                 </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary btn-lg" href="{{ route('categories.index') }}">View Categories <i class="fa fa-angle-right"></i></a>
+                </div>
             </div>
         </div>
     </div>

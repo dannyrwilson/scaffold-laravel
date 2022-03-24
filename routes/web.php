@@ -11,17 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::resources([
-    'categories' => 'CategoryController',
-    'products' => 'ProductController'
-]);
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
+// Use middleware "auth" to protect resource controllers. 
+// Used resource controllers as task was pretty much crud.
+Route::middleware(['auth'])->group(function () {
+	Route::resources([
+	    'categories' => 'CategoryController',
+	    'products' => 'ProductController'
+	]);
+});
 
-
-Route::get('/home', 'HomeController@index')->name('home');

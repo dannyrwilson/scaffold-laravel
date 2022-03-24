@@ -14,7 +14,15 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-
+			@if ($errors->any())
+			    <div class="alert alert-danger">
+			        <ul class="m-0">
+			            @foreach ($errors->all() as $error)
+			                <li>{{ $error }}</li>
+			            @endforeach
+			        </ul>
+			    </div>
+			@endif
 			<form action="{{ (!isset($category)) ? route('categories.store') : route('categories.update', $category->id) }}" method="POST" >
 
 				@csrf
