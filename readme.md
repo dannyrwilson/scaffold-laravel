@@ -1,5 +1,5 @@
 ## Additional bits in addition to the requirements...
-* Ability to delete categories
+* Ability to delete categories (which will delete products inside of the category selected)
 * Ability to delete products
 * Ability to edit categories
 * Ability to edit products
